@@ -16,7 +16,7 @@ Requirements: Apple Silicon or Intel Mac, Docker Desktop or OrbStack, and Docker
 open "$(./manager url)"
 ```
 
-The desktop and Hermes dashboard bind only to localhost. `init` generates an eight-character VNC password in the instance's private configuration. The desktop shortcut opens the Hermes TUI. Each instance keeps configuration and durable Hermes data beneath `.instances/<name>/`; it survives rebuilds and container replacement and is excluded from Git.
+The desktop and Hermes dashboard bind only to localhost. `init` generates an eight-character VNC password in the instance's private configuration. The desktop shortcut opens the Hermes TUI. The Hermes messaging gateway runs under Supervisor and automatically restarts with the appliance. Each instance keeps configuration and durable Hermes data beneath `.instances/<name>/`; it survives rebuilds and container replacement and is excluded from Git.
 
 The desktop includes Vim, Nano, Less, `jq`, `tree`, `htop`, Ripgrep, Zip/Unzip, and passwordless `sudo`. Root access exists only inside the container; it does not grant macOS privileges.
 
@@ -50,6 +50,10 @@ Disk is intentionally a soft, observable budget (`DISK_BUDGET_GB`, default 10), 
 ./manager clone NEW_NAME                  Stop and copy consistent state
 ./manager reset --yes                     Destroy state and make a blank appliance
 ./manager migrate-owner UID GID            Remap persistent state for a new host account
+./manager telegram-import TOKEN_FILE        Securely import a Telegram bot token
+./manager gateway-status                    Check the supervised Hermes gateway
+./manager pairing-list                      Show Telegram pairing requests
+./manager pairing-approve CODE              Approve a Telegram pairing code
 ./manager watchdog-install                Install a per-user macOS launchd keeper
 ./manager watchdog-remove                 Remove it
 ```

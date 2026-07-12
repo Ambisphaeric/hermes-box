@@ -1,6 +1,6 @@
 # Architecture
 
-The image extends the official Hermes Agent image with XFCE, TigerVNC, noVNC, and Supervisor. The official entrypoint remains first in the boot chain; it initializes `/opt/data`, fixes ownership, drops to the unprivileged `hermes` user, starts the optional dashboard, then launches Supervisor. Supervisor keeps only the desktop, web VNC proxy, and soft disk monitor alive.
+The image extends the official Hermes Agent image with XFCE, TigerVNC, noVNC, and Supervisor. The official entrypoint remains first in the boot chain; it initializes `/opt/data`, fixes ownership, drops to the unprivileged `hermes` user, starts the optional dashboard, then launches Supervisor. Supervisor keeps the desktop, web VNC proxy, Hermes messaging gateway, and soft disk monitor alive.
 
 The host-facing trust boundary is deliberately narrow: three loopback TCP ports and one bind mount beneath this repository. A PID ceiling, RAM/CPU limits, and no Docker socket reduce blast radius. The official entrypoint briefly needs root capabilities to map the container account to the macOS owner, then drops privileges before Hermes starts. The desktop user has passwordless `sudo` inside the container for appliance administration; that privilege does not cross Docker's boundary. This is stronger application isolation than a native install, but weaker than a separate VM kernel.
 

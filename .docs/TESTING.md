@@ -36,4 +36,6 @@ Test host: macOS arm64, OrbStack Docker Engine 29.4.0, Compose v2.
 - PASS: reset removed an old-state marker and the next boot generated fresh Hermes configuration and identity files.
 - PASS: a temporary UID/GID migration and return migration preserved a marker and runtime write access.
 - PASS: a user LaunchAgent recreated a deliberately removed high container, then uninstalled cleanly.
+- PASS: the supervised gateway connected to Telegram in polling mode, registered bot commands, and remained part of the container health check.
+- PASS: OpenAI Codex authentication completed a live `gpt-5.6-luna` request with medium reasoning and returned the expected test response.
 - NOT RUN: Docker Desktop, macOS amd64, or Hermes provider setup (requires user credentials).

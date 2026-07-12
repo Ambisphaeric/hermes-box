@@ -148,6 +148,29 @@ cmd_migrate_owner() {
   echo "migrated $(instance) to host UID $uid and GID $gid"
 }
 
+cmd_telegram_import() {
+  local source="${1:?usage: ./manager telegram-import TOKEN_FILE}" data token tmp
+  data=".instances/$(instance)/data"
+  [[ -f "$source" ]] || die "token file not found: $source"
+  token="$(tr -d '[:space:]' < "$source")"
+  [[ "$token" =~ ^[0-9]{6,}:[A-Za-z0-9_-]{30,}$ ]] || die "file must contain exactly one Telegram bot token"
+  umask 077
+  tmp="$(mktemp "$data/.env.telegram.XXXXXX")"
+  awk '!/^TELEGRAM_BOT_TOKEN=/' "$data/.env" > "$tmp"
+  printf 'TELEGRAM_BOT_TOKEN=%s\n' "$token" >> "$tmp"
+  mv "$tmp" "$data/.env"
+  chmod 600 "$data/.env" "$source"
+  unset token
+  compose exec -T hermes supervisorctl -s unix:///tmp/supervisor.sock restart gateway >/dev/null
+  echo "Telegram token imported and gateway restarted"
+}
+
+cmd_pairing_approve() {
+  local code="${1:?usage: ./manager pairing-approve CODE}"
+  [[ "$code" =~ ^[A-Za-z0-9]+$ ]] || die "invalid pairing code"
+  compose exec -T hermes bash -lc "source /opt/hermes/.venv/bin/activate && hermes pairing approve telegram '$code'"
+}
+
 cmd_watchdog_install() {
   local label plist
   label="org.hermes-box.$(instance)"
@@ -187,6 +210,10 @@ main() {
         clone) shift; cmd_clone "$@" ;;
         reset) shift; cmd_reset "$@" ;;
         migrate-owner) shift; cmd_migrate_owner "$@" ;;
+        telegram-import) shift; cmd_telegram_import "$@" ;;
+        gateway-status) compose exec -T hermes supervisorctl -s unix:///tmp/supervisor.sock status gateway ;;
+        pairing-list) compose exec -T hermes bash -lc 'source /opt/hermes/.venv/bin/activate && hermes pairing list' ;;
+        pairing-approve) shift; cmd_pairing_approve "$@" ;;
         watchdog-install) cmd_watchdog_install ;;
         watchdog-remove) label="org.hermes-box.$(instance)"; launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true; rm -f "$HOME/Library/LaunchAgents/$label.plist" ;;
         *) die "unknown command: $1" ;;
