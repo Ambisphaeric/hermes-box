@@ -23,11 +23,15 @@ Test host: macOS arm64, OrbStack Docker Engine 29.4.0, Compose v2.
 - PASS: official entrypoint initialized bundled skills and mapped Hermes to the host account IDs.
 - PASS: Supervisor reports desktop/noVNC running; direct health check passes and Docker reports `healthy`.
 - PASS: noVNC `GET /vnc.html` and Hermes dashboard `GET /` return successfully.
+- PASS: authenticated VNC capture produced a 1440×900 XFCE desktop; a remote double-click opened the desktop shortcut into a live Hermes TUI.
 - PASS: container ports inspect as loopback-only; mount inspection shows only the repository instance data directory.
 - PASS: inspect proves 2 GiB/2 CPU limits and `unless-stopped`; changing `MEMORY` to `4g` recreated it with `4294967296` bytes.
 - PASS: a workspace marker survived `compose down` followed by image rebuild/container recreation.
 - PASS: a stopped instance clone retained its marker and diverged independently after a clone-only write.
 - PASS: killing Supervisor inside the container produced `RestartCount=1` and returned to `healthy`.
 - PASS: the Hermes runtime UID can write the persistent workspace.
-- NOT RUN: browser-visible desktop/VNC login interaction because the in-app browser was unavailable; HTTP and process-level checks passed.
-- NOT RUN: Docker Desktop, macOS amd64, reset, launchd reconciliation, or Hermes provider setup (requires user credentials).
+- PASS: light, medium, and high ran concurrently with separate 2/4/8 GiB limits, names, loopback ports, health states, and persistence directories.
+- PASS: reset removed an old-state marker and the next boot generated fresh Hermes configuration and identity files.
+- PASS: a temporary UID/GID migration and return migration preserved a marker and runtime write access.
+- PASS: a user LaunchAgent recreated a deliberately removed high container, then uninstalled cleanly.
+- NOT RUN: Docker Desktop, macOS amd64, or Hermes provider setup (requires user credentials).

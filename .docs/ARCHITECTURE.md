@@ -6,6 +6,8 @@ The host-facing trust boundary is deliberately narrow: three loopback TCP ports 
 
 Persistence is directory-based so it is transparent, copyable, backup-friendly, and independent of Docker's internal volume database. Clone stops the source before copying to avoid torn SQLite/session files. A future restore command can add checksummed archives without changing the storage contract.
 
+One checkout manages multiple appliances. Each `.instances/<name>/instance.env` is both its Compose identity and private operator configuration; `.instances/<name>/data` is its durable filesystem. The `.env` symlink only selects the default. Explicit `--instance` operations never depend on that mutable selection, which makes launchd and scripts deterministic.
+
 “Smart cron” is two layers: Docker restart policy for container/process recovery, and optional user LaunchAgent reconciliation for declarative recovery. Health checks make degraded UI state visible. The keeper is intentionally simple and deterministic rather than an AI loop.
 
 The default 10 GB value is a warning threshold. Portable Docker on macOS cannot enforce or shrink an individual bind-mounted directory. Docker Desktop/OrbStack manage their Linux VM disk globally. Hard per-instance quotas would require a host sparse image or a privileged loopback filesystem, both of which complicate portability and recovery and are deferred.
