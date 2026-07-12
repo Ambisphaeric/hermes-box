@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Hermes Terminal
+Comment=Open Hermes Agent in a terminal
+Exec=xfce4-terminal --working-directory=/opt/data/workspace -e "bash -lc 'source /opt/hermes/.venv/bin/activate && hermes; exec bash'"
+Icon=utilities-terminal
+Terminal=false
+Categories=Development;

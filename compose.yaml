@@ -1,0 +1,33 @@
+name: ${INSTANCE:-hermes-light}
+services:
+  hermes:
+    build:
+      context: .
+      args:
+        HERMES_IMAGE: ${HERMES_IMAGE:-nousresearch/hermes-agent:latest}
+    image: hermes-box:local
+    restart: unless-stopped
+    mem_limit: ${MEMORY:-2g}
+    cpus: ${CPUS:-2}
+    pids_limit: 1024
+    shm_size: 512m
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      HERMES_HOME: /opt/data
+      HOME: /opt/data/home
+      DISPLAY: :1
+      VNC_PASSWORD: ${VNC_PASSWORD:-hermes}
+      DISK_BUDGET_GB: ${DISK_BUDGET_GB:-10}
+      HERMES_DASHBOARD: "1"
+      HERMES_DASHBOARD_HOST: 0.0.0.0
+      HERMES_DASHBOARD_PORT: 9119
+      TZ: ${TZ:-UTC}
+      HERMES_UID: ${HERMES_UID:-10000}
+      HERMES_GID: ${HERMES_GID:-10000}
+    volumes:
+      - ./.instances/${INSTANCE:-hermes-light}/data:/opt/data
+    ports:
+      - 127.0.0.1:${VNC_PORT:-5901}:5901
+      - 127.0.0.1:${NOVNC_PORT:-6081}:6080
+      - 127.0.0.1:${DASHBOARD_PORT:-9119}:9119

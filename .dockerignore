@@ -1,0 +1,9 @@
+.git
+.env
+.instances
+.runtime
+.docs
+README.md
+AGENTS.md
+LICENSE
+manager
