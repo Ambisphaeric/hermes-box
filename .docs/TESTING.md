@@ -26,6 +26,8 @@ Test host: macOS arm64, OrbStack Docker Engine 29.4.0, Compose v2.
 - PASS: authenticated VNC capture produced a 1440×900 XFCE desktop; a remote double-click opened the desktop shortcut into a live Hermes TUI.
 - PASS: container ports inspect as loopback-only; mount inspection shows only the repository instance data directory.
 - PASS: inspect proves 2 GiB/2 CPU limits and `unless-stopped`; changing `MEMORY` to `4g` recreated it with `4294967296` bytes.
+- PASS: a `20g` user override recreated high with a `21474836480` byte ceiling; restoring the 8 GiB preset also succeeded.
+- PASS: changing the soft disk budget to 25 GiB reached the container environment, and returning it to 10 GiB did not alter data.
 - PASS: a workspace marker survived `compose down` followed by image rebuild/container recreation.
 - PASS: a stopped instance clone retained its marker and diverged independently after a clone-only write.
 - PASS: killing Supervisor inside the container produced `RestartCount=1` and returned to `healthy`.
