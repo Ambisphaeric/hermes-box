@@ -11,8 +11,6 @@ services:
     cpus: ${CPUS:-2}
     pids_limit: 1024
     shm_size: 512m
-    security_opt:
-      - no-new-privileges:true
     environment:
       HERMES_HOME: /opt/data
       HOME: /opt/data/home

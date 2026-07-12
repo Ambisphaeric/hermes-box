@@ -5,8 +5,11 @@ USER root
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       dbus-x11 xfce4 xfce4-terminal tigervnc-standalone-server tigervnc-tools \
       novnc websockify supervisor procps curl ca-certificates \
+      vim nano less sudo jq tree htop ripgrep zip unzip \
     && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /etc/supervisor/conf.d /opt/hermes-box
+    && mkdir -p /etc/supervisor/conf.d /opt/hermes-box \
+    && printf 'hermes ALL=(ALL) NOPASSWD: ALL\n' > /etc/sudoers.d/hermes \
+    && chmod 0440 /etc/sudoers.d/hermes
 
 COPY container/supervisord.conf /etc/supervisor/conf.d/hermes-box.conf
 COPY container/start-desktop.sh container/healthcheck.sh /opt/hermes-box/

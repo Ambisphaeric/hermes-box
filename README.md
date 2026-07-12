@@ -18,6 +18,8 @@ open "$(./manager url)"
 
 The desktop and Hermes dashboard bind only to localhost. `init` generates an eight-character VNC password in the instance's private configuration. The desktop shortcut opens the Hermes TUI. Each instance keeps configuration and durable Hermes data beneath `.instances/<name>/`; it survives rebuilds and container replacement and is excluded from Git.
 
+The desktop includes Vim, Nano, Less, `jq`, `tree`, `htop`, Ripgrep, Zip/Unzip, and passwordless `sudo`. Root access exists only inside the container; it does not grant macOS privileges.
+
 ## Presets
 
 | Preset | RAM | CPU ceiling | Default ports |
